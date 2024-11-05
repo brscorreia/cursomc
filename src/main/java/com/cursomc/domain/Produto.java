@@ -9,38 +9,42 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
 @Entity
-public class Categoria implements Serializable {
-	/**
-	 * 
-	 */
+public class Produto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
+	private Double price;
 	
-	@ManyToMany(mappedBy = "categorias")
-	private List<Produto> produtos = new ArrayList<>();
+	@ManyToMany
+	@JoinTable(name= "PRODUTO_CATEGORIA",
+			joinColumns = @JoinColumn(name = "produto_id"),
+			inverseJoinColumns = @JoinColumn(name = "categoria_id")
+			)
+	private List<Categoria> categorias = new ArrayList<>();
 	
-	public Categoria() {
+	public Produto (){
 	}
-
-	public Categoria(Integer id, String name) {
-		super();
+	
+	public Produto(Integer id, String name, Double price) {
 		this.id = id;
 		this.name = name;
+		this.price = price;
 	}
 
-	public Integer getID() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setID(Integer iD) {
-		id = iD;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -50,13 +54,21 @@ public class Categoria implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public List<Produto> getProdutos() {
-		return produtos;
+
+	public Double getPrice() {
+		return price;
 	}
 
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public List<Categoria> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
 	}
 
 	@Override
@@ -72,7 +84,7 @@ public class Categoria implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Produto other = (Produto) obj;
 		return Objects.equals(id, other.id);
 	}
 
