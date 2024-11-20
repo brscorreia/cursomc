@@ -13,6 +13,7 @@ import com.cursomc.domain.Cidade;
 import com.cursomc.domain.Cliente;
 import com.cursomc.domain.Endereco;
 import com.cursomc.domain.Estado;
+import com.cursomc.domain.ItemPedido;
 import com.cursomc.domain.Pagamento;
 import com.cursomc.domain.PagamentoComBoleto;
 import com.cursomc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.cursomc.repositories.CidadeRepository;
 import com.cursomc.repositories.ClienteRepository;
 import com.cursomc.repositories.EnderecoRepository;
 import com.cursomc.repositories.EstadoRepository;
+import com.cursomc.repositories.ItemPedidoRepository;
 import com.cursomc.repositories.PagamentoRepository;
 import com.cursomc.repositories.PedidoRepository;
 import com.cursomc.repositories.ProdutoRepository;
@@ -48,6 +50,9 @@ public class CursomcApplication implements CommandLineRunner {
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -98,15 +103,27 @@ public class CursomcApplication implements CommandLineRunner {
 		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"),
 				null);
 		ped2.setPagamento(pagto2);
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
 
-		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
-		produtorepository.saveAll(Arrays.asList(p1, p2, p3));
-		estadoRepository.saveAll(Arrays.asList(est1, est2));
-		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
-		clienteRepository.saveAll(Arrays.asList(cli1));
-		enderecoRepository.saveAll(Arrays.asList(e1, e2));
-		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
-		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		//categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
+		//produtorepository.saveAll(Arrays.asList(p1, p2, p3));
+		//estadoRepository.saveAll(Arrays.asList(est1, est2));
+		//cidadeRepository.saveAll(Arrays.asList(c1, c2, c3));
+		//clienteRepository.saveAll(Arrays.asList(cli1));
+		//enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		//pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		//pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		//itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));	
 	}
 
 }
